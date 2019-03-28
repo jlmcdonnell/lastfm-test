@@ -10,6 +10,8 @@ ext {
     materialVersion = "1.1.0-alpha05"
     coroutinesVersion = "1.2.0-alpha"
     mockkVersion = "1.9"
+    gsonVersion = "2.8.5"
+    retrofitVersion = "2.5.0"
 }
 
 buildscript {

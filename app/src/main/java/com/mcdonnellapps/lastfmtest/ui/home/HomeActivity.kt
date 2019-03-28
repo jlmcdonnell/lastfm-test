@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.mcdonnellapps.lastfmtest.R
-import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Result
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.presentation.home.HomePresenter
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 class HomeActivity : AppCompatActivity(), HomePresenter.View {
 
@@ -16,11 +17,15 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home)
         presenter.subscribe(this)
-        presenter.query("1234")
+        presenter.query("Time")
     }
 
-    override fun showResults(results: List<Result>) {
-        Toast.makeText(this, "Loads results: $results", Toast.LENGTH_SHORT).show()
+    override fun showSearchResult(searchResult: MusicSearch) {
+        Toast.makeText(this, "Loads results: $searchResult", Toast.LENGTH_SHORT).show()
+        Timber.d("Results: $searchResult")
     }
 
+    override fun showGenericError() {
+        Toast.makeText(this, "Something no good", Toast.LENGTH_SHORT).show()
+    }
 }

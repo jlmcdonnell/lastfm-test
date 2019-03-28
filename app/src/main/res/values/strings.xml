@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">last.fm test</string>
 
+    <!-- Misc -->
+    <string name="lastfm_api_url">https://ws.audioscrobbler.com</string>
+
     <!-- Home -->
     <string name="home_search_hint">Search songs, artists, album</string>
 </resources>

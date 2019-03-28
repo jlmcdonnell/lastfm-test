@@ -5,6 +5,7 @@ import com.mcdonnellapps.lastfmtest.di.module.appModule
 import com.mcdonnellapps.lastfmtest.di.module.feature.lastfm.lastFmModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import timber.log.Timber
 
 class App : Application() {
 
@@ -17,6 +18,10 @@ class App : Application() {
                 appModule,
                 lastFmModule
             )
+        }
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
         }
     }
 

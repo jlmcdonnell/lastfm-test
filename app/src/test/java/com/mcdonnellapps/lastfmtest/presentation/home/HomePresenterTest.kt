@@ -2,9 +2,12 @@ package com.mcdonnellapps.lastfmtest.presentation.home
 
 import com.mcdonnellapps.lastfmtest.common.AppExecutors
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFmRepository
-import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Result
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.test.util.createTestLifecycle
-import io.mockk.*
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -35,25 +38,25 @@ class HomePresenterTest {
     }
 
     @Test
-    fun `on search query, show results`() {
-        val result = Result("1234")
+    fun `on search query, show search result`() {
+        val result = mockk<MusicSearch>()
 
         coEvery {
-            lastFmRepository.searchAsync(any())
-        } returns GlobalScope.async { listOf(Result("1234")) }
+            lastFmRepository.searchMusicAsync(any())
+        } returns GlobalScope.async { result }
 
         homePresenter.subscribe(view)
         homePresenter.query("1234")
 
         coVerify {
-            view.showResults(listOf(result))
+            view.showSearchResult(result)
         }
     }
 
     @Test
     fun `on search query error, show generic error`() {
         coEvery {
-            lastFmRepository.searchAsync(any())
+            lastFmRepository.searchMusicAsync(any())
         } returns GlobalScope.async { throw Exception() }
 
         homePresenter.subscribe(view)

@@ -1,8 +1,8 @@
 package com.mcdonnellapps.lastfmtest.domain.feature.lastfm
 
-import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Result
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import kotlinx.coroutines.Deferred
 
 interface LastFmRepository {
-    suspend fun searchAsync(query: String): Deferred<List<Result>>
+    suspend fun searchMusicAsync(query: String): Deferred<MusicSearch>
 }
