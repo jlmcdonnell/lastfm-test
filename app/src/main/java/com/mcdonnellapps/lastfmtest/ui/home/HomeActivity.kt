@@ -15,6 +15,7 @@ import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.home.*
+import kotlinx.android.synthetic.main.search_header_item.*
 import kotlinx.android.synthetic.main.track_search_item.*
 import org.koin.android.ext.android.inject
 
@@ -31,10 +32,15 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
         presenter.subscribe(this)
         presenter.query("Time")
 
-        groupAdapter.add(tracksSection)
+
+        groupAdapter.apply {
+            add(HeaderItem(getString(R.string.home_header_tracks)))
+            add(tracksSection)
+        }
 
         results.layoutManager = LinearLayoutManager(this)
         results.adapter = groupAdapter
+
     }
 
     override fun showSearchResult(searchResult: MusicSearch) {
@@ -43,6 +49,15 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
 
     override fun showGenericError() {
         Toast.makeText(this, R.string.generic_error, Toast.LENGTH_SHORT).show()
+    }
+
+    class HeaderItem(private val title: String) : Item() {
+
+        override fun getLayout() = R.layout.search_header_item
+
+        override fun bind(viewHolder: ViewHolder, position: Int) {
+            viewHolder.title.text = title
+        }
     }
 
     class TrackItem(private val track: Track) : Item() {
