@@ -9,8 +9,9 @@ object TrackMapper : Mapper<TrackSerializer, Track>() {
     override fun map(input: TrackSerializer): Track {
         return Track(
             mbid = input.mbid,
-            image = input.image.map(ImageMapper::map),
+            image = ImageCollectionMapper.map(input.image),
             name = input.name,
+            artist = input.artist,
             url = input.url
         )
     }

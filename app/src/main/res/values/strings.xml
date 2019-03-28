@@ -3,6 +3,7 @@
 
     <!-- Misc -->
     <string name="lastfm_api_url">https://ws.audioscrobbler.com</string>
+    <string name="generic_error">🤯 Something went wrong</string>
 
     <!-- Home -->
     <string name="home_search_hint">Search songs, artists, album</string>
