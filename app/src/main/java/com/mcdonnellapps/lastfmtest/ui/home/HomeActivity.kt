@@ -1,3 +1,5 @@
+@file:Suppress("ClassName")
+
 package com.mcdonnellapps.lastfmtest.ui.home
 
 import android.os.Bundle
@@ -12,6 +14,7 @@ import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
 import com.mcdonnellapps.lastfmtest.presentation.home.HomePresenter
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
+import com.xwray.groupie.groupiex.plusAssign
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.home.*
@@ -19,36 +22,48 @@ import kotlinx.android.synthetic.main.search_header_item.*
 import kotlinx.android.synthetic.main.track_search_item.*
 import org.koin.android.ext.android.inject
 
+@Suppress("IllegalIdentifier", "SpellCheckingInspection")
 class HomeActivity : AppCompatActivity(), HomePresenter.View {
 
     private val presenter by inject<HomePresenter>()
 
     private val groupAdapter = GroupAdapter<ViewHolder>()
+    private val musicSection = Section()
     private val tracksSection = Section()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home)
         presenter.subscribe(this)
-        presenter.query("Time")
 
-
-        groupAdapter.apply {
-            add(HeaderItem(getString(R.string.home_header_tracks)))
-            add(tracksSection)
-        }
+        musicSection.setPlaceholder(Placeholder())
+        musicSection += tracksSection
+        groupAdapter.add(musicSection)
 
         results.layoutManager = LinearLayoutManager(this)
         results.adapter = groupAdapter
 
+        searchText.setOnEditorActionListener { _, _, _ ->
+            presenter.query(searchText.text!!.toString())
+            return@setOnEditorActionListener true
+        }
     }
 
     override fun showSearchResult(searchResult: MusicSearch) {
         tracksSection.update(searchResult.tracks.map(::TrackItem))
     }
 
+    override fun clearSearchText() {
+        searchText.setText("")
+    }
+
     override fun showGenericError() {
         Toast.makeText(this, R.string.generic_error, Toast.LENGTH_SHORT).show()
+    }
+
+    class Placeholder : Item() {
+        override fun bind(viewHolder: ViewHolder, position: Int) = Unit
+        override fun getLayout() = R.layout.no_results_placeholder
     }
 
     class HeaderItem(private val title: String) : Item() {

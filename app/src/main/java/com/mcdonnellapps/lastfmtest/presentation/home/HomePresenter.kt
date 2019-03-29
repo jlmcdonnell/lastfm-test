@@ -14,6 +14,8 @@ class HomePresenter(
 ) : BasePresenter<HomePresenter.View>(executors) {
 
     fun query(query: String) = scope.launch {
+        view?.clearSearchText()
+
         try {
             repository.searchMusicAsync(query).await().also {
                 view?.showSearchResult(it)
@@ -26,5 +28,6 @@ class HomePresenter(
 
     interface View : BaseView {
         fun showSearchResult(searchResult: MusicSearch)
+        fun clearSearchText()
     }
 }

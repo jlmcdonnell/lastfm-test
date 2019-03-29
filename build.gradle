@@ -1,4 +1,8 @@
 ext {
+    compileSdkVersion = 28
+    targetSdkVersion = 28
+    minSdkVersion = 21
+
     koinVersion = "2.0.0-rc-1"
     timberVersion = "4.7.1"
     appCompatVersion = "1.1.0-alpha03"
@@ -15,6 +19,10 @@ ext {
     groupieVersion = "2.3.0"
     circleImageViewVersion = "3.0.0"
     glideVersion = "4.9.0"
+    rxBindingVersion = "3.0.0-alpha2"
+    dexcountVersion = "0.8.6"
+    rxLifecycleVersion = "3.0.0"
+    lottieVersion = "2.8.0"
 }
 
 buildscript {

@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$dexcountVersion"
+    }
+}
+
 ext {
     readLastFMApiKey = {
         def apiKey = project.properties.getOrDefault("lastFMApiKey", null)
@@ -9,15 +18,16 @@ ext {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.mcdonnellapps.lastfmtest"
-        minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode project.properties.getOrDefault("VERSION_CODE", 1) as int
+        versionName project.properties.getOrDefault("VERSION_NAME", "1.0")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "LASTFM_API_KEY", "\"${readLastFMApiKey()}\""
     }
@@ -63,6 +73,8 @@ dependencies {
     implementation "de.hdodenhof:circleimageview:$circleImageViewVersion"
 
     implementation "com.github.bumptech.glide:glide:$glideVersion"
+
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 
     testImplementation "junit:junit:$junitVersion"
     testImplementation "io.mockk:mockk:$mockkVersion"
