@@ -6,20 +6,25 @@ import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.presenter.base.BasePresenter
 import com.mcdonnellapps.lastfmtest.presenter.base.BaseView
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class HomePresenter(
-    executors: AppExecutors,
+    private val executors: AppExecutors,
     private val repository: LastFmRepository
 ) : BasePresenter<HomePresenter.View>(executors) {
 
     fun query(query: String) = scope.launch {
         view?.clearSearchText()
+        view?.showLoading()
 
         try {
-            repository.searchMusicAsync(query).await().also {
-                view?.showSearchResult(it)
+            val result = withContext(executors.io) {
+                repository.searchMusicAsync(query)
             }
+
+            view?.hideLoading()
+            view?.showSearchResult(result)
         } catch (e: Exception) {
             Timber.e(e, "Error searching for music")
             view?.showGenericError()
@@ -29,5 +34,7 @@ class HomePresenter(
     interface View : BaseView {
         fun showSearchResult(searchResult: MusicSearch)
         fun clearSearchText()
+        fun showLoading()
+        fun hideLoading()
     }
 }

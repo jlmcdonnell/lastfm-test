@@ -57,6 +57,14 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
         searchText.setText("")
     }
 
+    override fun showLoading() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun hideLoading() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun showGenericError() {
         Toast.makeText(this, R.string.generic_error, Toast.LENGTH_SHORT).show()
     }

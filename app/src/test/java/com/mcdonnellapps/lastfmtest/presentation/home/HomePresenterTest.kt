@@ -4,14 +4,11 @@ import com.mcdonnellapps.lastfmtest.common.AppExecutors
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFmRepository
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.test.util.createTestLifecycle
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.mockk
+import com.mcdonnellapps.lastfmtest.test.util.testAppExecutors
+import io.mockk.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Test
@@ -20,7 +17,7 @@ import org.junit.Test
 class HomePresenterTest {
 
 
-    private var appExecutors = AppExecutors()
+    private val appExecutors = testAppExecutors()
     private lateinit var lastFmRepository: LastFmRepository
     private lateinit var homePresenter: HomePresenter
     private lateinit var view: HomePresenter.View
@@ -29,7 +26,6 @@ class HomePresenterTest {
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
 
-        appExecutors = AppExecutors()
         lastFmRepository = mockk()
         homePresenter = HomePresenter(appExecutors, lastFmRepository)
 
@@ -38,12 +34,54 @@ class HomePresenterTest {
     }
 
     @Test
-    fun `on search query, show search result`() {
+    fun `when searching, clear search text`() {
+        coEvery {
+            lastFmRepository.searchMusicAsync(any())
+        } returns mockk()
+
+        homePresenter.subscribe(view)
+        homePresenter.query("1234")
+
+        coVerify {
+            view.clearSearchText()
+        }
+    }
+
+    @Test
+    fun `when searching, show loading`() {
+        coEvery {
+            lastFmRepository.searchMusicAsync(any())
+        } returns mockk()
+
+        homePresenter.subscribe(view)
+        homePresenter.query("1234")
+
+        coVerify {
+            view.showLoading()
+        }
+    }
+
+    @Test
+    fun `after searching, hide loading`() {
+        coEvery {
+            lastFmRepository.searchMusicAsync(any())
+        } returns mockk()
+
+        homePresenter.subscribe(view)
+        homePresenter.query("1234")
+
+        coVerify {
+            view.hideLoading()
+        }
+    }
+
+    @Test
+    fun `on search query, show search result`() = runBlocking {
         val result = mockk<MusicSearch>()
 
         coEvery {
             lastFmRepository.searchMusicAsync(any())
-        } returns GlobalScope.async { result }
+        } returns result
 
         homePresenter.subscribe(view)
         homePresenter.query("1234")
@@ -57,12 +95,12 @@ class HomePresenterTest {
     fun `on search query error, show generic error`() {
         coEvery {
             lastFmRepository.searchMusicAsync(any())
-        } returns GlobalScope.async { throw Exception() }
+        } throws Exception()
 
         homePresenter.subscribe(view)
         homePresenter.query("1234")
 
-        coVerify {
+        verify {
             view.showGenericError()
         }
     }
