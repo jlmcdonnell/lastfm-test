@@ -3,6 +3,7 @@
 package com.mcdonnellapps.lastfmtest.ui.home
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,7 +37,6 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
         setContentView(R.layout.home)
         presenter.subscribe(this)
 
-        musicSection.setPlaceholder(Placeholder())
         musicSection += tracksSection
         groupAdapter.add(musicSection)
 
@@ -57,12 +57,24 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
         searchText.setText("")
     }
 
+    override fun clearSearchResult() {
+        tracksSection.update(emptyList())
+    }
+
     override fun showLoading() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        progress.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        progress.visibility = View.GONE
+    }
+
+    override fun showEmpty() {
+        musicSection.setPlaceholder(Placeholder())
+    }
+
+    override fun hideEmpty() {
+        musicSection.removePlaceholder()
     }
 
     override fun showGenericError() {

@@ -5,6 +5,6 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 open class AppExecutors(
-    val io: CoroutineContext = EmptyCoroutineContext,
+    val io: CoroutineContext = Dispatchers.Default,
     val ui: CoroutineContext = Dispatchers.Main
 )

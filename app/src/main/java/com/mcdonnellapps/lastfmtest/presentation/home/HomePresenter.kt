@@ -15,7 +15,12 @@ class HomePresenter(
 ) : BasePresenter<HomePresenter.View>(executors) {
 
     fun query(query: String) = scope.launch {
+        if (query.isEmpty()) {
+            return@launch
+        }
+
         view?.clearSearchText()
+        view?.clearSearchResult()
         view?.showLoading()
 
         try {
@@ -25,16 +30,26 @@ class HomePresenter(
 
             view?.hideLoading()
             view?.showSearchResult(result)
+
+            if (result.tracks.isEmpty()) {
+                view?.showEmpty()
+            } else {
+                view?.hideEmpty()
+            }
         } catch (e: Exception) {
             Timber.e(e, "Error searching for music")
             view?.showGenericError()
+            view?.hideLoading()
         }
     }
 
     interface View : BaseView {
         fun showSearchResult(searchResult: MusicSearch)
+        fun clearSearchResult()
         fun clearSearchText()
         fun showLoading()
         fun hideLoading()
+        fun showEmpty()
+        fun hideEmpty()
     }
 }
