@@ -41,7 +41,7 @@ class HomePresenterTest {
         homePresenter.subscribe(view)
         homePresenter.query("1234")
 
-        coVerify {
+        verify {
             view.clearSearchText()
         }
     }
@@ -55,7 +55,7 @@ class HomePresenterTest {
         homePresenter.subscribe(view)
         homePresenter.query("1234")
 
-        coVerify {
+        verify {
             view.showLoading()
         }
     }
@@ -69,7 +69,7 @@ class HomePresenterTest {
         homePresenter.subscribe(view)
         homePresenter.query("1234")
 
-        coVerify {
+        verify {
             view.hideLoading()
         }
     }
@@ -85,8 +85,72 @@ class HomePresenterTest {
         homePresenter.subscribe(view)
         homePresenter.query("1234")
 
-        coVerify {
+        verify {
             view.showSearchResult(result)
+        }
+    }
+
+    @Test
+    fun `on search query, clear search text`() = runBlocking {
+        val result = mockk<MusicSearch>()
+
+        coEvery {
+            lastFmRepository.searchMusicAsync(any())
+        } returns result
+
+        homePresenter.subscribe(view)
+        homePresenter.query("1234")
+
+        verify {
+            view.clearSearchText()
+        }
+    }
+
+    @Test
+    fun `on search query, clear search result`() = runBlocking {
+        val result = mockk<MusicSearch>()
+
+        coEvery {
+            lastFmRepository.searchMusicAsync(any())
+        } returns result
+
+        homePresenter.subscribe(view)
+        homePresenter.query("1234")
+
+        verify {
+            view.clearSearchText()
+        }
+    }
+
+    @Test
+    fun `on search query, show loading`() = runBlocking {
+        val result = mockk<MusicSearch>()
+
+        coEvery {
+            lastFmRepository.searchMusicAsync(any())
+        } returns result
+
+        homePresenter.subscribe(view)
+        homePresenter.query("1234")
+
+        verify {
+            view.showLoading()
+        }
+    }
+
+    @Test
+    fun `on search result, hide loading`() = runBlocking {
+        val result = mockk<MusicSearch>()
+
+        coEvery {
+            lastFmRepository.searchMusicAsync(any())
+        } returns result
+
+        homePresenter.subscribe(view)
+        homePresenter.query("1234")
+
+        verify {
+            view.hideLoading()
         }
     }
 
