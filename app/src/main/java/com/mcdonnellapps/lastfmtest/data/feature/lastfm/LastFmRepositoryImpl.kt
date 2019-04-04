@@ -14,10 +14,12 @@ class LastFmRepositoryImpl(
         return runBlocking {
             val tracks = async { lastFmApi.searchTracks(query) }
             val artists = async { lastFmApi.searchArtists(query) }
+            val albums = async { lastFmApi.searchAlbums(query) }
 
             MusicSearch(
                 artists = artists.await(),
-                tracks = tracks.await()
+                tracks = tracks.await(),
+                albums = albums.await()
             )
         }
     }

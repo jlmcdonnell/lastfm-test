@@ -27,6 +27,7 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
     private val musicSection = Section()
     private val tracksSection = Section()
     private val artistsSection = Section()
+    private val albumSection = Section()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +36,8 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
 
         tracksSection.setHeader(HeaderItem(getString(R.string.home_header_tracks)))
         artistsSection.setHeader(HeaderItem(getString(R.string.home_header_artists)))
+        albumSection.setHeader(HeaderItem(getString(R.string.home_header_albums)))
+
         groupAdapter.add(musicSection)
 
         results.layoutManager = LinearLayoutManager(this)
@@ -48,13 +51,15 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
 
             return@setOnEditorActionListener true
         }
+
         results.itemAnimator = null
     }
 
     override fun showSearchResult(searchResult: MusicSearch) {
         tracksSection.update(searchResult.tracks.map(::TrackItem))
         artistsSection.update(searchResult.artists.map(::ArtistItem))
-        musicSection.update(listOf(tracksSection, artistsSection))
+        albumSection.update(searchResult.albums.map(::AlbumItem))
+        musicSection.update(listOf(tracksSection, artistsSection, albumSection))
         results.visibility = View.VISIBLE
     }
 

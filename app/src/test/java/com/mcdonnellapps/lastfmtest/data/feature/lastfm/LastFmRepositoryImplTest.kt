@@ -1,6 +1,7 @@
 package com.mcdonnellapps.lastfmtest.data.feature.lastfm
 
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.api.LastFmApi
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Album
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Artist
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
@@ -14,7 +15,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-@Suppress("EXPERIMENTAL_API_USAGE")
 class LastFmRepositoryImplTest {
 
     @MockK
@@ -29,32 +29,10 @@ class LastFmRepositoryImplTest {
     }
 
     @Test
-    fun `on music search, retrieve tracks`() = runBlocking {
+    fun `on music search, retrieve data`() = runBlocking {
         val tracks = listOf(mockk<Track>())
-        val artists = emptyList<Artist>()
-
-        every {
-            api.searchTracks(any())
-        } returns tracks
-
-        every {
-            api.searchArtists(any())
-        } returns artists
-
-        val actual = repository.searchMusic("artist")
-
-        val expected = MusicSearch(
-            tracks = tracks,
-            artists = artists
-        )
-
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `on music search, retrieve artists`() = runBlocking {
-        val tracks = emptyList<Track>()
         val artists = listOf(mockk<Artist>())
+        val albums = listOf(mockk<Album>())
 
         every {
             api.searchArtists(any())
@@ -64,11 +42,16 @@ class LastFmRepositoryImplTest {
             api.searchTracks(any())
         } returns tracks
 
-        val actual = repository.searchMusic("artist")
+        every {
+            api.searchAlbums(any())
+        } returns albums
+
+        val actual = repository.searchMusic("query")
 
         val expected = MusicSearch(
             tracks = tracks,
-            artists = artists
+            artists = artists,
+            albums = albums
         )
 
         assertEquals(expected, actual)
