@@ -21,9 +21,4 @@ class TrackItem(private val track: Track) : Item() {
             .into(viewHolder.image)
     }
 
-    override fun isSameAs(other: com.xwray.groupie.Item<*>?): Boolean {
-        return super.isSameAs(other)
-    }
-
-
 }

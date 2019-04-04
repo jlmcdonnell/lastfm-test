@@ -1,6 +1,7 @@
 package com.mcdonnellapps.lastfmtest.presentation.home
 
 import com.mcdonnellapps.lastfmtest.common.AppExecutors
+import com.mcdonnellapps.lastfmtest.common.extensions.lastfm.model.isEmpty
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFmRepository
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.presenter.base.BasePresenter
@@ -47,7 +48,7 @@ class HomePresenter(
 
                 view?.hideLoading()
 
-                if (result.tracks.isEmpty()) {
+                if (result.isEmpty()) {
                     view?.showNoResultsPlaceholder()
                 } else {
                     view?.hidePlaceholder()

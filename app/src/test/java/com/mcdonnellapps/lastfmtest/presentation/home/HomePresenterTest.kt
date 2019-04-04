@@ -5,7 +5,7 @@ import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
 import com.mcdonnellapps.lastfmtest.test.util.createTestLifecycle
 import com.mcdonnellapps.lastfmtest.test.util.testAppExecutors
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
@@ -32,12 +32,12 @@ class HomePresenterTest {
         homePresenter = HomePresenter(appExecutors, lastFmRepository)
 
         view = mockk(relaxUnitFun = true)
-        every { view.lifecycle } returns createTestLifecycle()
+        coEvery { view.lifecycle } returns createTestLifecycle()
     }
 
     @Test
     fun `when searching, clear search text`() {
-        every {
+        coEvery {
             lastFmRepository.searchMusic(any())
         } returns mockk()
 
@@ -51,7 +51,7 @@ class HomePresenterTest {
 
     @Test
     fun `when searching, show loading`() {
-        every {
+        coEvery {
             lastFmRepository.searchMusic(any())
         } returns mockk()
 
@@ -65,7 +65,7 @@ class HomePresenterTest {
 
     @Test
     fun `after searching, hide loading`() {
-        every {
+        coEvery {
             lastFmRepository.searchMusic(any())
         } returns mockk()
 
@@ -80,9 +80,9 @@ class HomePresenterTest {
     @Test
     fun `on search query, show search result`() = runBlocking {
         val tracks = listOf(mockk<Track>())
-        val result = MusicSearch(tracks)
+        val result = MusicSearch(tracks = tracks)
 
-        every {
+        coEvery {
             lastFmRepository.searchMusic(any())
         } returns result
 
@@ -98,7 +98,7 @@ class HomePresenterTest {
     fun `on search query, clear search text`() = runBlocking {
         val result = mockk<MusicSearch>()
 
-        every {
+        coEvery {
             lastFmRepository.searchMusic(any())
         } returns result
 
@@ -114,7 +114,7 @@ class HomePresenterTest {
     fun `on search query, clear search result`() = runBlocking {
         val result = mockk<MusicSearch>()
 
-        every {
+        coEvery {
             lastFmRepository.searchMusic(any())
         } returns result
 
@@ -130,7 +130,7 @@ class HomePresenterTest {
     fun `on search query, show loading`() = runBlocking {
         val result = mockk<MusicSearch>()
 
-        every {
+        coEvery {
             lastFmRepository.searchMusic(any())
         } returns result
 
@@ -146,7 +146,7 @@ class HomePresenterTest {
     fun `on search result, hide loading`() = runBlocking {
         val result = mockk<MusicSearch>()
 
-        every {
+        coEvery {
             lastFmRepository.searchMusic(any())
         } returns result
 
@@ -160,7 +160,7 @@ class HomePresenterTest {
 
     @Test
     fun `on search query error, show generic error`() {
-        every {
+        coEvery {
             lastFmRepository.searchMusic(any())
         } throws Exception()
 
@@ -174,9 +174,9 @@ class HomePresenterTest {
 
     @Test
     fun `on search result, hide empty state`() {
-        val result = MusicSearch(listOf(mockk()))
+        val result = MusicSearch(tracks = listOf(mockk()))
 
-        every {
+        coEvery {
             lastFmRepository.searchMusic(any())
         } returns result
 
@@ -190,9 +190,9 @@ class HomePresenterTest {
 
     @Test
     fun `on empty search result, show empty state`() {
-        every {
+        coEvery {
             lastFmRepository.searchMusic(any())
-        } returns MusicSearch(emptyList())
+        } returns MusicSearch()
 
         homePresenter.bind(view)
         homePresenter.query("1234")

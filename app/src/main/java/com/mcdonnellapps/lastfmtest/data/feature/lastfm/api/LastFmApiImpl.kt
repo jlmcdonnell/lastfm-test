@@ -2,10 +2,14 @@ package com.mcdonnellapps.lastfmtest.data.feature.lastfm.api
 
 import com.mcdonnellapps.lastfmtest.data.feature.lastfm.api.interceptor.ApiKeyInterceptor
 import com.mcdonnellapps.lastfmtest.data.feature.lastfm.api.interceptor.FormatAsJsonInterceptor
+import com.mcdonnellapps.lastfmtest.data.feature.lastfm.api.mapper.ArtistSearchMapper
 import com.mcdonnellapps.lastfmtest.data.feature.lastfm.api.mapper.TrackSearchMapper
+import com.mcdonnellapps.lastfmtest.data.feature.lastfm.api.model.ArtistSearchSerializer
 import com.mcdonnellapps.lastfmtest.data.feature.lastfm.api.model.TrackSearchSerializer
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFMException
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.api.LastFmApi
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Artist
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -19,11 +23,11 @@ class LastFmApiImpl(
 ) : LastFmApi {
 
     interface Service {
-//        @GET("/2.0?method=album.search")
+        //        @GET("/2.0?method=album.search")
 //        fun searchAlbums(@Query("album") album: String)
 //
-//        @GET("/2.0?method=artist.search")
-//        fun searchArtists(@Query("artist") artist: String)
+        @GET("/2.0?method=artist.search")
+        fun searchArtists(@Query("artist") artist: String): Call<ArtistSearchSerializer>
 
         @GET("/2.0?method=track.search")
         fun searchTracks(@Query("track") track: String): Call<TrackSearchSerializer>
@@ -41,9 +45,17 @@ class LastFmApiImpl(
         .build()
         .create(Service::class.java)
 
-    override fun searchTracks(query: String) = executeCall(service.searchTracks(query)) {
-        TrackSearchMapper.map(it)
-    }!!
+    override fun searchTracks(query: String): List<Track> {
+        return executeCall(service.searchTracks(query)) {
+            TrackSearchMapper.map(it)
+        }!!
+    }
+
+    override fun searchArtists(query: String): List<Artist> {
+        return executeCall(service.searchArtists(query)) {
+            ArtistSearchMapper.map(it)
+        }!!
+    }
 
     private fun <T, V> executeCall(call: Call<T>, mapper: (LastFmApiImpl.(T) -> V)?): V? {
         return call.execute().let {

@@ -1,6 +1,7 @@
 package com.mcdonnellapps.lastfmtest.data.feature.lastfm
 
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.api.LastFmApi
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Artist
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
 import io.mockk.MockKAnnotations
@@ -30,15 +31,44 @@ class LastFmRepositoryImplTest {
     @Test
     fun `on music search, retrieve tracks`() = runBlocking {
         val tracks = listOf(mockk<Track>())
+        val artists = emptyList<Artist>()
 
         every {
             api.searchTracks(any())
         } returns tracks
 
-        val actual = repository.searchMusic("track")
+        every {
+            api.searchArtists(any())
+        } returns artists
+
+        val actual = repository.searchMusic("artist")
 
         val expected = MusicSearch(
-            tracks = tracks
+            tracks = tracks,
+            artists = artists
+        )
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `on music search, retrieve artists`() = runBlocking {
+        val tracks = emptyList<Track>()
+        val artists = listOf(mockk<Artist>())
+
+        every {
+            api.searchArtists(any())
+        } returns artists
+
+        every {
+            api.searchTracks(any())
+        } returns tracks
+
+        val actual = repository.searchMusic("artist")
+
+        val expected = MusicSearch(
+            tracks = tracks,
+            artists = artists
         )
 
         assertEquals(expected, actual)

@@ -21,25 +21,25 @@
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/track"
+        android:id="@+id/artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        app:layout_constraintBottom_toTopOf="@id/track"
+        app:layout_constraintBottom_toTopOf="@id/artist"
         app:layout_constraintStart_toEndOf="@id/image"
         app:layout_constraintTop_toTopOf="@id/image"
-        tools:text="Money" />
+        tools:text="Pink Floyd" />
 
     <TextView
-        android:id="@+id/artist"
+        android:id="@+id/listeners"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
         app:layout_constraintBottom_toBottomOf="@id/image"
         app:layout_constraintStart_toEndOf="@id/image"
-        app:layout_constraintTop_toBottomOf="@id/track"
-        tools:text="Pink Floyd" />
+        app:layout_constraintTop_toBottomOf="@id/artist"
+        tools:text="1000 listeners" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

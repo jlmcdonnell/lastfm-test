@@ -26,6 +26,7 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
     private val groupAdapter = GroupAdapter<ViewHolder>()
     private val musicSection = Section()
     private val tracksSection = Section()
+    private val artistsSection = Section()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +34,7 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
         presenter.bind(this)
 
         tracksSection.setHeader(HeaderItem(getString(R.string.home_header_tracks)))
+        artistsSection.setHeader(HeaderItem(getString(R.string.home_header_artists)))
         groupAdapter.add(musicSection)
 
         results.layoutManager = LinearLayoutManager(this)
@@ -51,7 +53,8 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
 
     override fun showSearchResult(searchResult: MusicSearch) {
         tracksSection.update(searchResult.tracks.map(::TrackItem))
-        musicSection.update(listOf(tracksSection))
+        artistsSection.update(searchResult.artists.map(::ArtistItem))
+        musicSection.update(listOf(tracksSection, artistsSection))
         results.visibility = View.VISIBLE
     }
 
@@ -62,6 +65,7 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
     override fun clearSearchResult() {
         musicSection.update(emptyList())
         tracksSection.update(emptyList())
+        artistsSection.update(emptyList())
     }
 
     override fun showLoading() {
