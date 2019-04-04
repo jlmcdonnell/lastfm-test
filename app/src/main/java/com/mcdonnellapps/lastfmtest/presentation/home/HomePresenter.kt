@@ -5,6 +5,7 @@ import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFmRepository
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.presenter.base.BasePresenter
 import com.mcdonnellapps.lastfmtest.presenter.base.BaseView
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -14,32 +15,51 @@ class HomePresenter(
     private val repository: LastFmRepository
 ) : BasePresenter<HomePresenter.View>(executors) {
 
-    fun query(query: String) = scope.launch {
-        if (query.isEmpty()) {
-            return@launch
+    private var queryJob: Job? = null
+
+    override fun subscribe(view: View) {
+        super.subscribe(view)
+        view.showEmptyPlaceholder()
+    }
+
+    fun query(query: String) {
+        Timber.d("querying: $query")
+
+        if (queryJob?.isActive == true) {
+            Timber.d("Query Job is already active")
+            return
         }
 
-        view?.clearSearchText()
-        view?.clearSearchResult()
-        view?.showLoading()
-
-        try {
-            val result = withContext(executors.io) {
-                repository.searchMusicAsync(query)
+        queryJob = uiScope.launch {
+            if (query.isEmpty()) {
+                return@launch
             }
 
-            view?.hideLoading()
-            view?.showSearchResult(result)
+            view?.clearSearchText()
+            view?.clearSearchResult()
+            view?.hidePlaceholder()
+            view?.showLoading()
 
-            if (result.tracks.isEmpty()) {
-                view?.showEmpty()
-            } else {
-                view?.hideEmpty()
+            try {
+                val result = withContext(executors.io) {
+                    repository.searchMusic(query)
+                }
+
+                view?.hideLoading()
+
+                if (result.tracks.isEmpty()) {
+                    view?.showNoResultsPlaceholder()
+                } else {
+                    view?.hidePlaceholder()
+                }
+
+                view?.showSearchResult(result)
+            } catch (e: Exception) {
+                Timber.e(e, "Error searching for music")
+
+                view?.showGenericError()
+                view?.hideLoading()
             }
-        } catch (e: Exception) {
-            Timber.e(e, "Error searching for music")
-            view?.showGenericError()
-            view?.hideLoading()
         }
     }
 
@@ -49,7 +69,8 @@ class HomePresenter(
         fun clearSearchText()
         fun showLoading()
         fun hideLoading()
-        fun showEmpty()
-        fun hideEmpty()
+        fun showEmptyPlaceholder()
+        fun showNoResultsPlaceholder()
+        fun hidePlaceholder()
     }
 }

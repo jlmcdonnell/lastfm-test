@@ -6,8 +6,8 @@ import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 
 class LastFmRepositoryImpl(private val lastFmApi: LastFmApi) : LastFmRepository {
 
-    override suspend fun searchMusicAsync(query: String): MusicSearch {
-        val tracks = lastFmApi.searchTracksAsync(query)
+    override fun searchMusic(query: String): MusicSearch {
+        val tracks = lastFmApi.searchTracks(query)
         return MusicSearch(tracks)
     }
 }

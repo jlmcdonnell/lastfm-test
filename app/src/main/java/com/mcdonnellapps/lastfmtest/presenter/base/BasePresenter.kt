@@ -14,11 +14,12 @@ open class BasePresenter<View : BaseView>(
 ) : ViewModel(), LifecycleObserver {
 
     private val job = Job()
-    protected val scope = CoroutineScope(executors.ui + job)
+    protected val uiScope = CoroutineScope(executors.ui + job)
+    protected val ioScope = CoroutineScope(executors.io + job)
     protected var view: View? = null
 
     @CallSuper
-    fun subscribe(view: View) {
+    open fun subscribe(view: View) {
         this.view = view
         view.lifecycle.addObserver(this)
     }

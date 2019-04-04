@@ -35,7 +35,7 @@ class HomePresenterTest {
     @Test
     fun `when searching, clear search text`() {
         coEvery {
-            lastFmRepository.searchMusicAsync(any())
+            lastFmRepository.searchMusic(any())
         } returns mockk()
 
         homePresenter.subscribe(view)
@@ -49,7 +49,7 @@ class HomePresenterTest {
     @Test
     fun `when searching, show loading`() {
         coEvery {
-            lastFmRepository.searchMusicAsync(any())
+            lastFmRepository.searchMusic(any())
         } returns mockk()
 
         homePresenter.subscribe(view)
@@ -63,7 +63,7 @@ class HomePresenterTest {
     @Test
     fun `after searching, hide loading`() {
         coEvery {
-            lastFmRepository.searchMusicAsync(any())
+            lastFmRepository.searchMusic(any())
         } returns mockk()
 
         homePresenter.subscribe(view)
@@ -79,7 +79,7 @@ class HomePresenterTest {
         val result = mockk<MusicSearch>()
 
         coEvery {
-            lastFmRepository.searchMusicAsync(any())
+            lastFmRepository.searchMusic(any())
         } returns result
 
         homePresenter.subscribe(view)
@@ -95,7 +95,7 @@ class HomePresenterTest {
         val result = mockk<MusicSearch>()
 
         coEvery {
-            lastFmRepository.searchMusicAsync(any())
+            lastFmRepository.searchMusic(any())
         } returns result
 
         homePresenter.subscribe(view)
@@ -111,7 +111,7 @@ class HomePresenterTest {
         val result = mockk<MusicSearch>()
 
         coEvery {
-            lastFmRepository.searchMusicAsync(any())
+            lastFmRepository.searchMusic(any())
         } returns result
 
         homePresenter.subscribe(view)
@@ -127,7 +127,7 @@ class HomePresenterTest {
         val result = mockk<MusicSearch>()
 
         coEvery {
-            lastFmRepository.searchMusicAsync(any())
+            lastFmRepository.searchMusic(any())
         } returns result
 
         homePresenter.subscribe(view)
@@ -143,7 +143,7 @@ class HomePresenterTest {
         val result = mockk<MusicSearch>()
 
         coEvery {
-            lastFmRepository.searchMusicAsync(any())
+            lastFmRepository.searchMusic(any())
         } returns result
 
         homePresenter.subscribe(view)
@@ -157,7 +157,7 @@ class HomePresenterTest {
     @Test
     fun `on search query error, show generic error`() {
         coEvery {
-            lastFmRepository.searchMusicAsync(any())
+            lastFmRepository.searchMusic(any())
         } throws Exception()
 
         homePresenter.subscribe(view)

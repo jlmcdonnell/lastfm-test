@@ -10,5 +10,7 @@
     <string name="home_header_tracks">Tracks</string>
     <string name="home_header_artists">Artists</string>
     <string name="home_header_albums">Albums</string>
+    <string name="home_empty_message">Search for tracks, albums, or artists</string>
+    <string name="home_empty_no_results">No results</string>
 
 </resources>

@@ -1,6 +1,5 @@
 package com.mcdonnellapps.lastfmtest.data.feature.lastfm
 
-import com.mcdonnellapps.lastfmtest.common.AppExecutors
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.api.LastFmApi
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
@@ -33,10 +32,10 @@ class LastFmRepositoryImplTest {
         val tracks = listOf(mockk<Track>())
 
         every {
-            api.searchTracksAsync(any())
+            api.searchTracks(any())
         } returns tracks
 
-        val actual = repository.searchMusicAsync("track")
+        val actual = repository.searchMusic("track")
 
         val expected = MusicSearch(
             tracks = tracks

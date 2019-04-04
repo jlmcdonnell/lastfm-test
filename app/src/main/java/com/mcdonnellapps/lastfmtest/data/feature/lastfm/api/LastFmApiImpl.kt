@@ -41,7 +41,7 @@ class LastFmApiImpl(
         .build()
         .create(Service::class.java)
 
-    override fun searchTracksAsync(query: String) = executeCall(service.searchTracks(query)) {
+    override fun searchTracks(query: String) = executeCall(service.searchTracks(query)) {
         TrackSearchMapper.map(it)
     }!!
 

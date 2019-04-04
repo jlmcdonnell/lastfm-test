@@ -2,28 +2,23 @@
 
 package com.mcdonnellapps.lastfmtest.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.mcdonnellapps.lastfmtest.R
-import com.mcdonnellapps.lastfmtest.common.extensions.lastfm.model.defaultImageUrl
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
-import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
 import com.mcdonnellapps.lastfmtest.presentation.home.HomePresenter
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
-import com.xwray.groupie.groupiex.plusAssign
-import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.home.*
-import kotlinx.android.synthetic.main.search_header_item.*
-import kotlinx.android.synthetic.main.track_search_item.*
 import org.koin.android.ext.android.inject
 
-@Suppress("IllegalIdentifier", "SpellCheckingInspection")
+@Suppress("IllegalIdentifier")
 class HomeActivity : AppCompatActivity(), HomePresenter.View {
 
     private val presenter by inject<HomePresenter>()
@@ -37,7 +32,7 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
         setContentView(R.layout.home)
         presenter.subscribe(this)
 
-        musicSection += tracksSection
+        tracksSection.setHeader(HeaderItem(getString(R.string.home_header_tracks)))
         groupAdapter.add(musicSection)
 
         results.layoutManager = LinearLayoutManager(this)
@@ -45,12 +40,20 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
 
         searchText.setOnEditorActionListener { _, _, _ ->
             presenter.query(searchText.text!!.toString())
+
+            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                .hideSoftInputFromWindow(window.decorView.windowToken, 0)
+
             return@setOnEditorActionListener true
         }
+        results.itemAnimator = null
     }
 
     override fun showSearchResult(searchResult: MusicSearch) {
+        results.visibility = View.GONE
         tracksSection.update(searchResult.tracks.map(::TrackItem))
+        musicSection.update(listOf(tracksSection))
+        results.visibility = View.VISIBLE
     }
 
     override fun clearSearchText() {
@@ -58,6 +61,8 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
     }
 
     override fun clearSearchResult() {
+        results.visibility = View.GONE
+        musicSection.update(emptyList())
         tracksSection.update(emptyList())
     }
 
@@ -69,11 +74,15 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
         progress.visibility = View.GONE
     }
 
-    override fun showEmpty() {
-        musicSection.setPlaceholder(Placeholder())
+    override fun showEmptyPlaceholder() {
+        musicSection.setPlaceholder(EmptyState(getString(R.string.home_empty_message)))
     }
 
-    override fun hideEmpty() {
+    override fun showNoResultsPlaceholder() {
+        musicSection.setPlaceholder(EmptyState(getString(R.string.home_empty_no_results)))
+    }
+
+    override fun hidePlaceholder() {
         musicSection.removePlaceholder()
     }
 
@@ -81,31 +90,4 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
         Toast.makeText(this, R.string.generic_error, Toast.LENGTH_SHORT).show()
     }
 
-    class Placeholder : Item() {
-        override fun bind(viewHolder: ViewHolder, position: Int) = Unit
-        override fun getLayout() = R.layout.no_results_placeholder
-    }
-
-    class HeaderItem(private val title: String) : Item() {
-
-        override fun getLayout() = R.layout.search_header_item
-
-        override fun bind(viewHolder: ViewHolder, position: Int) {
-            viewHolder.title.text = title
-        }
-    }
-
-    class TrackItem(private val track: Track) : Item() {
-
-        override fun getLayout() = R.layout.track_search_item
-
-        override fun bind(viewHolder: ViewHolder, position: Int) {
-            viewHolder.track.text = track.name
-            viewHolder.artist.text = track.artist
-
-            Glide.with(viewHolder.root)
-                .load(track.defaultImageUrl())
-                .into(viewHolder.image)
-        }
-    }
 }

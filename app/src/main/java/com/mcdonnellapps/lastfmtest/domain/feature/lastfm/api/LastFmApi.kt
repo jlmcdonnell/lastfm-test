@@ -4,6 +4,6 @@ import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
 
 interface LastFmApi {
 
-    fun searchTracksAsync(query: String): List<Track>
+    fun searchTracks(query: String): List<Track>
 
 }
