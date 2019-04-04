@@ -2,9 +2,12 @@ package com.mcdonnellapps.lastfmtest.presentation.home
 
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFmRepository
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
 import com.mcdonnellapps.lastfmtest.test.util.createTestLifecycle
 import com.mcdonnellapps.lastfmtest.test.util.testAppExecutors
-import io.mockk.*
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -34,11 +37,11 @@ class HomePresenterTest {
 
     @Test
     fun `when searching, clear search text`() {
-        coEvery {
+        every {
             lastFmRepository.searchMusic(any())
         } returns mockk()
 
-        homePresenter.subscribe(view)
+        homePresenter.bind(view)
         homePresenter.query("1234")
 
         verify {
@@ -48,11 +51,11 @@ class HomePresenterTest {
 
     @Test
     fun `when searching, show loading`() {
-        coEvery {
+        every {
             lastFmRepository.searchMusic(any())
         } returns mockk()
 
-        homePresenter.subscribe(view)
+        homePresenter.bind(view)
         homePresenter.query("1234")
 
         verify {
@@ -62,11 +65,11 @@ class HomePresenterTest {
 
     @Test
     fun `after searching, hide loading`() {
-        coEvery {
+        every {
             lastFmRepository.searchMusic(any())
         } returns mockk()
 
-        homePresenter.subscribe(view)
+        homePresenter.bind(view)
         homePresenter.query("1234")
 
         verify {
@@ -76,13 +79,14 @@ class HomePresenterTest {
 
     @Test
     fun `on search query, show search result`() = runBlocking {
-        val result = mockk<MusicSearch>()
+        val tracks = listOf(mockk<Track>())
+        val result = MusicSearch(tracks)
 
-        coEvery {
+        every {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        homePresenter.subscribe(view)
+        homePresenter.bind(view)
         homePresenter.query("1234")
 
         verify {
@@ -94,11 +98,11 @@ class HomePresenterTest {
     fun `on search query, clear search text`() = runBlocking {
         val result = mockk<MusicSearch>()
 
-        coEvery {
+        every {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        homePresenter.subscribe(view)
+        homePresenter.bind(view)
         homePresenter.query("1234")
 
         verify {
@@ -110,11 +114,11 @@ class HomePresenterTest {
     fun `on search query, clear search result`() = runBlocking {
         val result = mockk<MusicSearch>()
 
-        coEvery {
+        every {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        homePresenter.subscribe(view)
+        homePresenter.bind(view)
         homePresenter.query("1234")
 
         verify {
@@ -126,11 +130,11 @@ class HomePresenterTest {
     fun `on search query, show loading`() = runBlocking {
         val result = mockk<MusicSearch>()
 
-        coEvery {
+        every {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        homePresenter.subscribe(view)
+        homePresenter.bind(view)
         homePresenter.query("1234")
 
         verify {
@@ -142,11 +146,11 @@ class HomePresenterTest {
     fun `on search result, hide loading`() = runBlocking {
         val result = mockk<MusicSearch>()
 
-        coEvery {
+        every {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        homePresenter.subscribe(view)
+        homePresenter.bind(view)
         homePresenter.query("1234")
 
         verify {
@@ -156,15 +160,49 @@ class HomePresenterTest {
 
     @Test
     fun `on search query error, show generic error`() {
-        coEvery {
+        every {
             lastFmRepository.searchMusic(any())
         } throws Exception()
 
-        homePresenter.subscribe(view)
+        homePresenter.bind(view)
         homePresenter.query("1234")
 
         verify {
             view.showGenericError()
+        }
+    }
+
+    @Test
+    fun `on search result, hide empty state`() {
+        val result = MusicSearch(listOf(mockk()))
+
+        every {
+            lastFmRepository.searchMusic(any())
+        } returns result
+
+        homePresenter.bind(view)
+        homePresenter.query("1234")
+
+        verify {
+            view.hidePlaceholder()
+        }
+    }
+
+    @Test
+    fun `on empty search result, show empty state`() {
+        every {
+            lastFmRepository.searchMusic(any())
+        } returns MusicSearch(emptyList())
+
+        homePresenter.bind(view)
+        homePresenter.query("1234")
+
+        verify {
+            view.showEmptyPlaceholder()
+        }
+
+        verify(exactly = 0) {
+            view.showSearchResult(any())
         }
     }
 }

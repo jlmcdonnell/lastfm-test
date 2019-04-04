@@ -6,7 +6,7 @@
     <string name="generic_error">🤯 Something went wrong</string>
 
     <!-- Home -->
-    <string name="home_search_hint">Search songs, artists, album</string>
+    <string name="home_search_hint">Search songs, artists, albums</string>
     <string name="home_header_tracks">Tracks</string>
     <string name="home_header_artists">Artists</string>
     <string name="home_header_albums">Albums</string>

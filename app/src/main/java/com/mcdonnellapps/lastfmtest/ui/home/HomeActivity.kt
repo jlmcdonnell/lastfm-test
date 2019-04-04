@@ -30,7 +30,7 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home)
-        presenter.subscribe(this)
+        presenter.bind(this)
 
         tracksSection.setHeader(HeaderItem(getString(R.string.home_header_tracks)))
         groupAdapter.add(musicSection)
@@ -50,7 +50,6 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
     }
 
     override fun showSearchResult(searchResult: MusicSearch) {
-        results.visibility = View.GONE
         tracksSection.update(searchResult.tracks.map(::TrackItem))
         musicSection.update(listOf(tracksSection))
         results.visibility = View.VISIBLE
@@ -61,7 +60,6 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
     }
 
     override fun clearSearchResult() {
-        results.visibility = View.GONE
         musicSection.update(emptyList())
         tracksSection.update(emptyList())
     }

@@ -19,13 +19,13 @@ open class BasePresenter<View : BaseView>(
     protected var view: View? = null
 
     @CallSuper
-    open fun subscribe(view: View) {
+    open fun bind(view: View) {
         this.view = view
         view.lifecycle.addObserver(this)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun unsubscribe() {
+    fun unbind() {
         job.cancel()
         view?.lifecycle?.removeObserver(this)
         view = null

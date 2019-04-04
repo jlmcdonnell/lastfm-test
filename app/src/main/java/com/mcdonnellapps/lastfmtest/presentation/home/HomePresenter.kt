@@ -17,8 +17,8 @@ class HomePresenter(
 
     private var queryJob: Job? = null
 
-    override fun subscribe(view: View) {
-        super.subscribe(view)
+    override fun bind(view: View) {
+        super.bind(view)
         view.showEmptyPlaceholder()
     }
 
@@ -51,9 +51,8 @@ class HomePresenter(
                     view?.showNoResultsPlaceholder()
                 } else {
                     view?.hidePlaceholder()
+                    view?.showSearchResult(result)
                 }
-
-                view?.showSearchResult(result)
             } catch (e: Exception) {
                 Timber.e(e, "Error searching for music")
 
