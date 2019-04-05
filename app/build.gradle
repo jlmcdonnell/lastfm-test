@@ -58,6 +58,7 @@ dependencies {
     implementation "com.google.android.material:material:$materialVersion"
 
     implementation "org.koin:koin-core:$koinVersion"
+    implementation "org.koin:koin-core-ext:$koinVersion"
     implementation "org.koin:koin-android:$koinVersion"
 
     implementation "com.jakewharton.timber:timber:$timberVersion"

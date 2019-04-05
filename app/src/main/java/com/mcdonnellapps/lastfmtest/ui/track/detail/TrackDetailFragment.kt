@@ -9,7 +9,7 @@ import com.mcdonnellapps.lastfmtest.R
 import org.koin.android.ext.android.inject
 
 class TrackDetailFragment : Fragment(), TrackDetailPresenter.View {
-    
+
 
     private val presenter by inject<TrackDetailPresenter>()
 

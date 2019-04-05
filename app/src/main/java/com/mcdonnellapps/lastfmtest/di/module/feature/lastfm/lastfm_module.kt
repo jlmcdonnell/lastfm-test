@@ -12,13 +12,13 @@ import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.api.LastFmApi
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.interactor.AddRecentQuery
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.interactor.GetRecentQueries
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.qualifier.StringQualifier
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import org.koin.experimental.builder.factory
+import org.koin.experimental.builder.singleBy
 
 val lastFmModule = module {
-    val apiUrlQualifier = StringQualifier("last-fm-api-url")
-
-    single(apiUrlQualifier) {
+    single(named("api-url")) {
         androidContext().getString(R.string.lastfm_api_url)
     }
 
@@ -26,29 +26,20 @@ val lastFmModule = module {
         ApiKeyInterceptor(BuildConfig.LASTFM_API_KEY)
     }
 
-    single {
+    single<LastFmApi> {
         LastFmApiImpl(
-            apiUrl = get(apiUrlQualifier),
-            apiKeyInterceptor = get()
-        ) as LastFmApi
-    }
-
-    single {
-        LastFmApiImpl(
-            apiUrl = get(apiUrlQualifier),
+            apiUrl = get(named("api-url")),
             apiKeyInterceptor = get()
         )
     }
 
-    single<LastFmRepository> {
-        LastFmRepositoryImpl(get())
-    }
+    // Repositories
+    singleBy<LastFmRepository, LastFmRepositoryImpl>()
 
-    single<SearchHistory> {
-        SearchHistoryImpl(get())
-    }
+    // Services
+    singleBy<SearchHistory, SearchHistoryImpl>()
 
-    factory { GetRecentQueries(get()) }
-
-    factory { AddRecentQuery(get()) }
+    // Interactors
+    factory<GetRecentQueries>()
+    factory<AddRecentQuery>()
 }

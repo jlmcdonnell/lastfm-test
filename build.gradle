@@ -3,7 +3,7 @@ ext {
     targetSdkVersion = 28
     minSdkVersion = 21
 
-    koinVersion = "2.0.0-rc-1"
+    koinVersion = "2.0.0-rc-2"
     timberVersion = "4.7.1"
     appCompatVersion = "1.1.0-alpha03"
     ktxVersion = "1.1.0-alpha05"
