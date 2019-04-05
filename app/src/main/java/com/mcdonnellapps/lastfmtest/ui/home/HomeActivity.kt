@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,14 +44,7 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
         results.layoutManager = LinearLayoutManager(this)
         results.adapter = groupAdapter
 
-        searchText.setOnEditorActionListener { _, _, _ ->
-            presenter.query(searchText.text!!.toString())
-
-            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                .hideSoftInputFromWindow(window.decorView.windowToken, 0)
-
-            return@setOnEditorActionListener true
-        }
+        setupSearchText()
 
         results.itemAnimator = null
     }
@@ -93,8 +87,31 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
         musicSection.removePlaceholder()
     }
 
+    override fun setRecentQueries(queries: List<String>) {
+        ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, queries)
+            .also(searchText::setAdapter)
+    }
+
     override fun showGenericError() {
         Toast.makeText(this, R.string.generic_error, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun setupSearchText() {
+        searchText.setOnEditorActionListener { _, _, _ ->
+            submitQuery()
+            return@setOnEditorActionListener true
+        }
+
+        searchText.setOnItemClickListener { _, _, _, _ ->
+            submitQuery()
+        }
+    }
+
+    private fun submitQuery() {
+        presenter.query(searchText.text!!.toString())
+
+        (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+            .hideSoftInputFromWindow(window.decorView.windowToken, 0)
     }
 
 }
