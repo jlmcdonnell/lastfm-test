@@ -1,11 +1,14 @@
 package com.mcdonnellapps.lastfmtest.presentation.home
 
+import com.mcdonnellapps.lastfmtest.domain.feature.common.preferences.interactor.AddRecentQuery
+import com.mcdonnellapps.lastfmtest.domain.feature.common.preferences.interactor.RecentQueries
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFmRepository
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
 import com.mcdonnellapps.lastfmtest.test.util.createTestLifecycle
 import com.mcdonnellapps.lastfmtest.test.util.testAppExecutors
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +24,8 @@ class HomePresenterTest {
 
     private val appExecutors = testAppExecutors()
     private lateinit var lastFmRepository: LastFmRepository
+    private lateinit var addRecentQuery: AddRecentQuery
+    private lateinit var getRecentQueries: RecentQueries
     private lateinit var homePresenter: HomePresenter
     private lateinit var view: HomePresenter.View
 
@@ -29,7 +34,10 @@ class HomePresenterTest {
         Dispatchers.setMain(Dispatchers.Unconfined)
 
         lastFmRepository = mockk()
-        homePresenter = HomePresenter(appExecutors, lastFmRepository)
+        getRecentQueries = mockk()
+        addRecentQuery = mockk(relaxUnitFun = true)
+
+        homePresenter = HomePresenter(appExecutors, lastFmRepository, getRecentQueries, addRecentQuery)
 
         view = mockk(relaxUnitFun = true)
         coEvery { view.lifecycle } returns createTestLifecycle()
@@ -198,11 +206,54 @@ class HomePresenterTest {
         homePresenter.query("1234")
 
         verify {
-            view.showEmptyPlaceholder()
+            view.showNoResultsPlaceholder()
         }
 
         verify(exactly = 0) {
             view.showSearchResult(any())
         }
+    }
+
+    @Test
+    fun `on subscribe, show empty placeholder`() {
+        homePresenter.bind(view)
+        verify { view.showEmptyPlaceholder() }
+    }
+
+    @Test
+    fun `on subscribe, retrieve recent queries`() {
+        val recentQueries = listOf("query")
+
+        every {
+            getRecentQueries.execute()
+        } returns recentQueries
+
+        homePresenter.bind(view)
+
+        verify { view.setRecentQueries(recentQueries) }
+    }
+
+    @Test
+    fun `on search with results, add to recent query`() {
+        coEvery {
+            lastFmRepository.searchMusic("1234")
+        } returns MusicSearch(tracks = listOf(mockk()))
+
+        homePresenter.bind(view)
+        homePresenter.query("1234")
+
+        verify { addRecentQuery.execute("1234") }
+    }
+
+    @Test
+    fun `on search with no results, don't add to recent query`() {
+        coEvery {
+            lastFmRepository.searchMusic("1234")
+        } returns MusicSearch()
+
+        homePresenter.bind(view)
+        homePresenter.query("1234")
+
+        verify(exactly = 0) { addRecentQuery.execute("1234") }
     }
 }

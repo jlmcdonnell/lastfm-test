@@ -2,9 +2,9 @@ package com.mcdonnellapps.lastfmtest.presentation.home
 
 import com.mcdonnellapps.lastfmtest.common.AppExecutors
 import com.mcdonnellapps.lastfmtest.common.extensions.lastfm.model.isEmpty
+import com.mcdonnellapps.lastfmtest.domain.feature.common.preferences.interactor.AddRecentQuery
+import com.mcdonnellapps.lastfmtest.domain.feature.common.preferences.interactor.RecentQueries
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFmRepository
-import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.interactor.AddRecentQuery
-import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.interactor.GetRecentQueries
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.presenter.base.BasePresenter
 import com.mcdonnellapps.lastfmtest.presenter.base.BaseView
@@ -16,7 +16,7 @@ import timber.log.Timber
 class HomePresenter(
     private val executors: AppExecutors,
     private val repository: LastFmRepository,
-    private val getRecentQueries: GetRecentQueries,
+    private val getRecentQueries: RecentQueries,
     private val addRecentQuery: AddRecentQuery
 ) : BasePresenter<HomePresenter.View>(executors) {
 
