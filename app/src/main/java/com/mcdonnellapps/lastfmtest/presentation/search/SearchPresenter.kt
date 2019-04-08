@@ -5,7 +5,10 @@ import com.mcdonnellapps.lastfmtest.common.extensions.lastfm.model.isEmpty
 import com.mcdonnellapps.lastfmtest.domain.feature.common.preferences.interactor.AddRecentQuery
 import com.mcdonnellapps.lastfmtest.domain.feature.common.preferences.interactor.RecentQueries
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFmRepository
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Album
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Artist
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
 import com.mcdonnellapps.lastfmtest.presenter.base.BasePresenter
 import com.mcdonnellapps.lastfmtest.presenter.base.BaseView
 import kotlinx.coroutines.Job
@@ -69,6 +72,18 @@ class SearchPresenter(
         }
     }
 
+    fun trackClicked(track: Track) {
+        view?.showTrackDetail(track)
+    }
+
+    fun albumClicked(album: Album) {
+        view?.showAlbumDetail(album)
+    }
+
+    fun artistClicked(artist: Artist) {
+        view?.showArtistDetail(artist)
+    }
+
     private fun addRecentQuery(query: String) {
         ioScope.launch {
             try {
@@ -104,5 +119,8 @@ class SearchPresenter(
         fun showNoResultsPlaceholder()
         fun hidePlaceholder()
         fun setRecentQueries(queries: List<String>)
+        fun showTrackDetail(track: Track)
+        fun showAlbumDetail(album: Album)
+        fun showArtistDetail(artist: Artist)
     }
 }

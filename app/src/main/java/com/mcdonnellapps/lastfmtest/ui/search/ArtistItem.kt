@@ -8,7 +8,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.artist_search_item.*
 
-class ArtistItem(private val artist: Artist) : Item() {
+class ArtistItem(val artist: Artist) : Item() {
 
     override fun getLayout() = R.layout.artist_search_item
 

@@ -8,7 +8,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.album_search_item.*
 
-class AlbumItem(private val album: Album) : Item() {
+class AlbumItem(val album: Album) : Item() {
 
     override fun getLayout() = R.layout.album_search_item
 

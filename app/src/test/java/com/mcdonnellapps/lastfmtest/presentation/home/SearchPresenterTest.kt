@@ -3,6 +3,8 @@ package com.mcdonnellapps.lastfmtest.presentation.home
 import com.mcdonnellapps.lastfmtest.domain.feature.common.preferences.interactor.AddRecentQuery
 import com.mcdonnellapps.lastfmtest.domain.feature.common.preferences.interactor.RecentQueries
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFmRepository
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Album
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Artist
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
 import com.mcdonnellapps.lastfmtest.presentation.search.SearchPresenter
@@ -27,7 +29,7 @@ class SearchPresenterTest {
     private lateinit var lastFmRepository: LastFmRepository
     private lateinit var addRecentQuery: AddRecentQuery
     private lateinit var getRecentQueries: RecentQueries
-    private lateinit var searchPresenter: SearchPresenter
+    private lateinit var presenter: SearchPresenter
     private lateinit var view: SearchPresenter.View
 
     @Before
@@ -38,7 +40,7 @@ class SearchPresenterTest {
         getRecentQueries = mockk()
         addRecentQuery = mockk(relaxUnitFun = true)
 
-        searchPresenter = SearchPresenter(
+        presenter = SearchPresenter(
             appExecutors,
             lastFmRepository,
             getRecentQueries,
@@ -55,8 +57,8 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic(any())
         } returns mockk()
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify {
             view.clearSearchText()
@@ -69,8 +71,8 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic(any())
         } returns mockk()
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify {
             view.showLoading()
@@ -83,8 +85,8 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic(any())
         } returns mockk()
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify {
             view.hideLoading()
@@ -100,8 +102,8 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify {
             view.showSearchResult(result)
@@ -116,8 +118,8 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify {
             view.clearSearchText()
@@ -132,8 +134,8 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify {
             view.clearSearchText()
@@ -148,8 +150,8 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify {
             view.showLoading()
@@ -164,8 +166,8 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify {
             view.hideLoading()
@@ -178,8 +180,8 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic(any())
         } throws Exception()
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify {
             view.showGenericError()
@@ -194,8 +196,8 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify {
             view.hidePlaceholder()
@@ -208,8 +210,8 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic(any())
         } returns MusicSearch()
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify {
             view.showNoResultsPlaceholder()
@@ -222,7 +224,7 @@ class SearchPresenterTest {
 
     @Test
     fun `on subscribe, show empty placeholder`() {
-        searchPresenter.bind(view)
+        presenter.bind(view)
         verify { view.showEmptyPlaceholder() }
     }
 
@@ -234,7 +236,7 @@ class SearchPresenterTest {
             getRecentQueries.execute()
         } returns recentQueries
 
-        searchPresenter.bind(view)
+        presenter.bind(view)
 
         verify { view.setRecentQueries(recentQueries) }
     }
@@ -245,8 +247,8 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic("1234")
         } returns MusicSearch(tracks = listOf(mockk()))
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify { addRecentQuery.execute("1234") }
     }
@@ -257,9 +259,39 @@ class SearchPresenterTest {
             lastFmRepository.searchMusic("1234")
         } returns MusicSearch()
 
-        searchPresenter.bind(view)
-        searchPresenter.query("1234")
+        presenter.bind(view)
+        presenter.query("1234")
 
         verify(exactly = 0) { addRecentQuery.execute("1234") }
+    }
+
+    @Test
+    fun `on track clicked, show track detail`() {
+        val track = mockk<Track>()
+
+        presenter.bind(view)
+        presenter.trackClicked(track)
+
+        verify { view.showTrackDetail(track) }
+    }
+
+    @Test
+    fun `on artist clicked, show artist detail`() {
+        val artist = mockk<Artist>()
+
+        presenter.bind(view)
+        presenter.artistClicked(artist)
+
+        verify { view.showArtistDetail(artist) }
+    }
+
+    @Test
+    fun `on album clicked, show album detail`() {
+        val album = mockk<Album>()
+
+        presenter.bind(view)
+        presenter.albumClicked(album)
+
+        verify { view.showAlbumDetail(album) }
     }
 }

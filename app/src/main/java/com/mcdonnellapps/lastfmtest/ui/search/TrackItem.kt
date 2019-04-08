@@ -8,7 +8,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.track_search_item.*
 
-class TrackItem(private val track: Track) : Item() {
+class TrackItem(val track: Track) : Item() {
 
     override fun getLayout() = R.layout.track_search_item
 

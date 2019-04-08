@@ -14,6 +14,8 @@ class TrackDetailFragment : Fragment(), TrackDetailPresenter.View {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.track_detail, container, false).also {
+            val args = TrackDetailFragmentArgs.fromBundle(requireArguments())
+            presenter.trackId = args.trackId
             presenter.bind(this)
         }
     }
