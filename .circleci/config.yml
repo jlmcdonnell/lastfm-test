@@ -8,7 +8,7 @@ jobs:
     - checkout
     - run:
         name: test android build
-        command: ./gradlew -PlastFMApiKey=fake-token
+        command: ./gradlew testDebug -PlastFMApiKey=fake-token
     - store_test_results:
         path: "app/build/test-results/testDebugUnitTest/"
 
