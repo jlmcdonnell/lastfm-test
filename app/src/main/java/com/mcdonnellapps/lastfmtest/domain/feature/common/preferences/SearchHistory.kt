@@ -1,4 +1,4 @@
-package com.mcdonnellapps.lastfmtest.domain.feature.lastfm
+package com.mcdonnellapps.lastfmtest.domain.feature.preferences
 
 interface SearchHistory {
     suspend fun recentQueries(): List<String>

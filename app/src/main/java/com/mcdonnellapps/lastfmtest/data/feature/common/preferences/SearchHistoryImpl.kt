@@ -1,9 +1,10 @@
 package com.mcdonnellapps.lastfmtest.data.feature.lastfm
 
 import android.content.Context
-import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.SearchHistory
+import com.mcdonnellapps.lastfmtest.domain.feature.common.preferences.SearchHistory
 
-class SearchHistoryImpl(context: Context) : SearchHistory {
+class SearchHistoryImpl(context: Context) :
+    SearchHistory {
 
     companion object {
         private const val PREFERENCES_NAME = "search_history"
