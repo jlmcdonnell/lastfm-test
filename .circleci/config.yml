@@ -16,8 +16,8 @@ workflows:
   version: 2.0
   android:
     jobs:
-      - test-android
-    filters:
-      branches:
-        only:
-        - master
+    - test-android:
+        filters:
+          branches:
+            only:
+            - master
