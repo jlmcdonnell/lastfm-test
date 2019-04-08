@@ -8,7 +8,7 @@ jobs:
     - checkout
     - run:
         name: test android build
-        command: ./gradlew testDebug -PlastFMApiKey=fake-token -Dorg.gradle.daemon=false -Dandroid.useAndroidX=true
+        command: ./gradlew testDebug -PlastFMApiKey=fake-token -Pandroid.useAndroidX=true -Dorg.gradle.daemon=false
     - store_test_results:
         path: "app/build/test-results/testDebugUnitTest/"
 
