@@ -11,10 +11,15 @@ import org.koin.android.ext.android.inject
 class TrackDetailFragment : Fragment(), TrackDetailPresenter.View {
 
 
+    companion object {
+        const val EXTRA_TRACK_ID = "track_id"
+    }
+
     private val presenter by inject<TrackDetailPresenter>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.track_detail, container, false).also {
+            presenter.trackId = arguments!!.getString(EXTRA_TRACK_ID)
             presenter.bind(this)
         }
     }
