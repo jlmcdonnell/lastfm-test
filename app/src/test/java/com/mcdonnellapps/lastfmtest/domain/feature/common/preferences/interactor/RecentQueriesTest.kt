@@ -20,7 +20,7 @@ class RecentQueriesTest {
 
     @Test
     fun `execute returns list of queries`() {
-        every { appPreferences.recentQueries } returns listOf("1234")
+        every { appPreferences.recentQueries } returns listOf("1234:0")
 
         assertEquals(recentQueries.execute(), listOf("1234"))
     }
