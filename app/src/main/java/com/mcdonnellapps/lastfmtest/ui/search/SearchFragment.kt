@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mcdonnellapps.lastfmtest.R
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
