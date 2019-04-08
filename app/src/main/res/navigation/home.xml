@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/home"
+    app:startDestination="@id/searchFragment">
+
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.mcdonnellapps.lastfmtest.ui.search.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_trackDetailFragment"
+            app:destination="@id/trackDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/trackDetailFragment"
+        android:name="com.mcdonnellapps.lastfmtest.ui.track.detail.TrackDetailFragment"
+        android:label="TrackDetailFragment">
+        <argument
+            android:name="track_id"
+            app:argType="string" />
+    </fragment>
+</navigation>
