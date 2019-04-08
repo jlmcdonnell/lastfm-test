@@ -3,6 +3,7 @@ package com.mcdonnellapps.lastfmtest.data.feature.lastfm
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFmRepository
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.api.LastFmApi
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.TrackInfo
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
@@ -22,5 +23,9 @@ class LastFmRepositoryImpl(
                 albums = albums.await()
             )
         }
+    }
+
+    override suspend fun trackById(mbid: String): TrackInfo {
+        return lastFmApi.trackById(mbid)
     }
 }

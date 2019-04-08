@@ -1,10 +1,7 @@
 package com.mcdonnellapps.lastfmtest.data.feature.lastfm
 
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.api.LastFmApi
-import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Album
-import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Artist
-import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
-import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.*
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -57,4 +54,14 @@ class LastFmRepositoryImplTest {
         assertEquals(expected, actual)
     }
 
+    @Test
+    fun `track by id`() = runBlocking {
+        val track = mockk<TrackInfo>()
+
+        every {
+            api.trackById("1234")
+        } returns track
+
+        assertEquals(repository.trackById("1234"), track)
+    }
 }
