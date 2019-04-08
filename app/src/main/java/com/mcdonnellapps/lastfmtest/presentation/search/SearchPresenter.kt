@@ -1,4 +1,4 @@
-package com.mcdonnellapps.lastfmtest.presentation.home
+package com.mcdonnellapps.lastfmtest.presentation.search
 
 import com.mcdonnellapps.lastfmtest.common.AppExecutors
 import com.mcdonnellapps.lastfmtest.common.extensions.lastfm.model.isEmpty
@@ -13,12 +13,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-class HomePresenter(
+class SearchPresenter(
     private val executors: AppExecutors,
     private val repository: LastFmRepository,
     private val getRecentQueries: RecentQueries,
     private val addRecentQuery: AddRecentQuery
-) : BasePresenter<HomePresenter.View>(executors) {
+) : BasePresenter<SearchPresenter.View>(executors) {
 
     private var queryJob: Job? = null
 

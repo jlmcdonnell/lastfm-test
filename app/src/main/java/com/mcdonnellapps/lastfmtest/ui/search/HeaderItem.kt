@@ -1,4 +1,4 @@
-package com.mcdonnellapps.lastfmtest.ui.home
+package com.mcdonnellapps.lastfmtest.ui.search
 
 import com.mcdonnellapps.lastfmtest.R
 import com.xwray.groupie.kotlinandroidextensions.Item

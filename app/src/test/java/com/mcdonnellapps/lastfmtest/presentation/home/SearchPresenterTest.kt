@@ -5,6 +5,7 @@ import com.mcdonnellapps.lastfmtest.domain.feature.common.preferences.interactor
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFmRepository
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.Track
+import com.mcdonnellapps.lastfmtest.presentation.search.SearchPresenter
 import com.mcdonnellapps.lastfmtest.test.util.createTestLifecycle
 import com.mcdonnellapps.lastfmtest.test.util.testAppExecutors
 import io.mockk.coEvery
@@ -19,15 +20,15 @@ import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class HomePresenterTest {
+class SearchPresenterTest {
 
 
     private val appExecutors = testAppExecutors()
     private lateinit var lastFmRepository: LastFmRepository
     private lateinit var addRecentQuery: AddRecentQuery
     private lateinit var getRecentQueries: RecentQueries
-    private lateinit var homePresenter: HomePresenter
-    private lateinit var view: HomePresenter.View
+    private lateinit var searchPresenter: SearchPresenter
+    private lateinit var view: SearchPresenter.View
 
     @Before
     fun setUp() {
@@ -37,7 +38,12 @@ class HomePresenterTest {
         getRecentQueries = mockk()
         addRecentQuery = mockk(relaxUnitFun = true)
 
-        homePresenter = HomePresenter(appExecutors, lastFmRepository, getRecentQueries, addRecentQuery)
+        searchPresenter = SearchPresenter(
+            appExecutors,
+            lastFmRepository,
+            getRecentQueries,
+            addRecentQuery
+        )
 
         view = mockk(relaxUnitFun = true)
         coEvery { view.lifecycle } returns createTestLifecycle()
@@ -49,8 +55,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic(any())
         } returns mockk()
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify {
             view.clearSearchText()
@@ -63,8 +69,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic(any())
         } returns mockk()
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify {
             view.showLoading()
@@ -77,8 +83,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic(any())
         } returns mockk()
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify {
             view.hideLoading()
@@ -94,8 +100,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify {
             view.showSearchResult(result)
@@ -110,8 +116,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify {
             view.clearSearchText()
@@ -126,8 +132,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify {
             view.clearSearchText()
@@ -142,8 +148,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify {
             view.showLoading()
@@ -158,8 +164,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify {
             view.hideLoading()
@@ -172,8 +178,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic(any())
         } throws Exception()
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify {
             view.showGenericError()
@@ -188,8 +194,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic(any())
         } returns result
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify {
             view.hidePlaceholder()
@@ -202,8 +208,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic(any())
         } returns MusicSearch()
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify {
             view.showNoResultsPlaceholder()
@@ -216,7 +222,7 @@ class HomePresenterTest {
 
     @Test
     fun `on subscribe, show empty placeholder`() {
-        homePresenter.bind(view)
+        searchPresenter.bind(view)
         verify { view.showEmptyPlaceholder() }
     }
 
@@ -228,7 +234,7 @@ class HomePresenterTest {
             getRecentQueries.execute()
         } returns recentQueries
 
-        homePresenter.bind(view)
+        searchPresenter.bind(view)
 
         verify { view.setRecentQueries(recentQueries) }
     }
@@ -239,8 +245,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic("1234")
         } returns MusicSearch(tracks = listOf(mockk()))
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify { addRecentQuery.execute("1234") }
     }
@@ -251,8 +257,8 @@ class HomePresenterTest {
             lastFmRepository.searchMusic("1234")
         } returns MusicSearch()
 
-        homePresenter.bind(view)
-        homePresenter.query("1234")
+        searchPresenter.bind(view)
+        searchPresenter.query("1234")
 
         verify(exactly = 0) { addRecentQuery.execute("1234") }
     }

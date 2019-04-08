@@ -1,6 +1,6 @@
 @file:Suppress("ClassName")
 
-package com.mcdonnellapps.lastfmtest.ui.home
+package com.mcdonnellapps.lastfmtest.ui.search
 
 import android.content.Context
 import android.os.Bundle
@@ -12,17 +12,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mcdonnellapps.lastfmtest.R
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.MusicSearch
-import com.mcdonnellapps.lastfmtest.presentation.home.HomePresenter
+import com.mcdonnellapps.lastfmtest.presentation.search.SearchPresenter
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import kotlinx.android.synthetic.main.home.*
+import kotlinx.android.synthetic.main.search.*
 import org.koin.android.ext.android.inject
 
 @Suppress("IllegalIdentifier")
-class HomeActivity : AppCompatActivity(), HomePresenter.View {
+class SearchActivity : AppCompatActivity(), SearchPresenter.View {
 
-    private val presenter by inject<HomePresenter>()
+    private val presenter by inject<SearchPresenter>()
 
     private val groupAdapter = GroupAdapter<ViewHolder>()
     private val musicSection = Section()
@@ -32,7 +32,7 @@ class HomeActivity : AppCompatActivity(), HomePresenter.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.home)
+        setContentView(R.layout.search)
         presenter.bind(this)
 
         tracksSection.setHeader(HeaderItem(getString(R.string.home_header_tracks)))
