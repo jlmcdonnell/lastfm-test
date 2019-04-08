@@ -17,3 +17,7 @@ workflows:
   android:
     jobs:
       - test-android
+    filters:
+      branches:
+        only:
+        - master
