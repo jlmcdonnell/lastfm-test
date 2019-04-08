@@ -32,6 +32,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emptyWhale"
-        tools:text="@string/home_empty_no_results" />
+        tools:text="@string/search_empty_no_results" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

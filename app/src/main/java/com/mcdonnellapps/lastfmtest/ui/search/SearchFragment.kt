@@ -31,9 +31,9 @@ class SearchFragment : Fragment(R.layout.search), SearchPresenter.View {
         super.onViewCreated(view, savedInstanceState)
         presenter.bind(this)
 
-        tracksSection.setHeader(HeaderItem(getString(R.string.home_header_tracks)))
-        artistsSection.setHeader(HeaderItem(getString(R.string.home_header_artists)))
-        albumSection.setHeader(HeaderItem(getString(R.string.home_header_albums)))
+        tracksSection.setHeader(HeaderItem(getString(R.string.search_header_tracks)))
+        artistsSection.setHeader(HeaderItem(getString(R.string.search_header_artists)))
+        albumSection.setHeader(HeaderItem(getString(R.string.search_header_albums)))
 
         groupAdapter.add(musicSection)
 
@@ -72,11 +72,11 @@ class SearchFragment : Fragment(R.layout.search), SearchPresenter.View {
     }
 
     override fun showEmptyPlaceholder() {
-        musicSection.setPlaceholder(EmptyState(getString(R.string.home_empty_message)))
+        musicSection.setPlaceholder(EmptyState(getString(R.string.search_empty_message)))
     }
 
     override fun showNoResultsPlaceholder() {
-        musicSection.setPlaceholder(EmptyState(getString(R.string.home_empty_no_results)))
+        musicSection.setPlaceholder(EmptyState(getString(R.string.search_empty_no_results)))
     }
 
     override fun hidePlaceholder() {

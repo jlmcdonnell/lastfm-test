@@ -56,7 +56,7 @@
             android:layout_gravity="center"
             android:layout_margin="12dp"
             android:background="#fff"
-            android:hint="@string/home_search_hint"
+            android:hint="@string/search_hint"
             android:imeOptions="actionSearch"
             android:padding="8dp"
             android:singleLine="true" />
