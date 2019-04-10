@@ -1,12 +1,14 @@
 package com.mcdonnellapps.lastfmtest.data.feature.lastfm.api.model
 
-data class TrackInfoSerializer(
-    val mbid: String,
-    val name: String,
-    val artist: Artist,
-    val album: Album,
-    val url: String
-) {
+data class TrackInfoSerializer(val track: Track?) {
+    data class Track(
+        val mbid: String,
+        val name: String,
+        val artist: Artist,
+        val album: Album,
+        val url: String
+    )
+
     data class Artist(
         val name: String,
         val mbid: String

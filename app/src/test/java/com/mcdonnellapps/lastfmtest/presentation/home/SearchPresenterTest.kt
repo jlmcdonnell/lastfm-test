@@ -48,7 +48,7 @@ class SearchPresenterTest {
         )
 
         view = mockk(relaxUnitFun = true)
-        coEvery { view.lifecycle } returns createTestLifecycle()
+        every { view.lifecycle } returns createTestLifecycle()
     }
 
     @Test

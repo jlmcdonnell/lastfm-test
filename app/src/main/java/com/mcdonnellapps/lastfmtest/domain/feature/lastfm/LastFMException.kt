@@ -9,5 +9,7 @@ class LastFMException(
         class HTTPError(code: Int, message: String) : Error(
             message = "last.fm HTTP Error: code=$code, message=$message"
         )
+
+        object TrackNotFoundError : Error("Track not found")
     }
 }

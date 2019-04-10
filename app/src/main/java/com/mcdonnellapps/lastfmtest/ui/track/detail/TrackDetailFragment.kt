@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.mcdonnellapps.lastfmtest.R
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.TrackInfo
 import org.koin.android.ext.android.inject
 
 class TrackDetailFragment : Fragment(), TrackDetailPresenter.View {
@@ -25,4 +26,7 @@ class TrackDetailFragment : Fragment(), TrackDetailPresenter.View {
         presenter.unbind()
     }
 
+    override fun showTrackInfo(trackInfo: TrackInfo) {
+
+    }
 }
