@@ -2,7 +2,7 @@ package com.mcdonnellapps.lastfmtest.ui.track.detail
 
 import com.mcdonnellapps.lastfmtest.common.AppExecutors
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFMException
-import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFMException.Error.*
+import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFMException.Error.TrackNotFoundError
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.LastFmRepository
 import com.mcdonnellapps.lastfmtest.domain.feature.lastfm.model.TrackInfo
 import com.mcdonnellapps.lastfmtest.presenter.base.BasePresenter
@@ -25,14 +25,21 @@ class TrackDetailPresenter(
 
     private fun loadTrack() {
         uiScope.launch {
-            withContext(appExecutors.io) {
-                try {
-                    view?.showTrackInfo(lastFmRepository.trackById(trackId))
-                } catch (e: Exception) {
-                    when ((e as? LastFMException)?.error) {
-                        TrackNotFoundError -> Timber.d("Unable to find track ($trackId)")
+            try {
+                val track = withContext(appExecutors.io) {
+                    lastFmRepository.trackById(trackId)
+                }
+                view?.showTrackInfo(track)
+            } catch (e: Exception) {
+                when ((e as? LastFMException)?.error) {
+                    TrackNotFoundError -> {
+                        Timber.e(e, "Unable to find track ($trackId)")
+                        view?.showGenericError()
                     }
-                    view?.showGenericError()
+                    else -> {
+                        Timber.e(e, "Error loading track")
+                        view?.showGenericError()
+                    }
                 }
             }
         }

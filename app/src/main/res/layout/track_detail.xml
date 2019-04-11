@@ -26,6 +26,7 @@
         app:layout_constraintTop_toTopOf="@id/image" />
 
     <TextView
+        android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -41,5 +42,26 @@
         app:layout_constraintTop_toTopOf="@id/image"
         app:layout_constraintVertical_bias=".9"
         tools:text="Track Title" />
+
+    <ScrollView
+        android:id="@+id/wikiLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image">
+
+        <TextView
+            android:id="@+id/wiki"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="6dp"
+            android:padding="16dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Hello world\nThis is some text" />
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

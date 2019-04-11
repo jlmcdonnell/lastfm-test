@@ -29,7 +29,14 @@ object TrackInfoMapper : Mapper<TrackInfoSerializer, TrackInfo>() {
                 )
             },
             url = input.url,
-            name = input.name
+            name = input.name,
+            wiki = input.wiki?.let { wiki ->
+                TrackInfo.Wiki(
+                    published = wiki.published,
+                    content = wiki.content,
+                    summary = wiki.summary
+                )
+            }
         )
     }
 }

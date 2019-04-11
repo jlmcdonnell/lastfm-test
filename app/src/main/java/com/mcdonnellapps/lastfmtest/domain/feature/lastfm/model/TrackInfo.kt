@@ -5,7 +5,8 @@ data class TrackInfo(
     val name: String,
     val artist: Artist,
     val album: Album,
-    val url: String
+    val url: String,
+    val wiki: Wiki?
 ) {
     data class Artist(
         val name: String,
@@ -17,5 +18,11 @@ data class TrackInfo(
         val artist: String,
         val title: String,
         val image: ImageCollection
+    )
+
+    data class Wiki(
+        val published: String,
+        val summary: String,
+        val content: String
     )
 }

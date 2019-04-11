@@ -6,7 +6,8 @@ data class TrackInfoSerializer(val track: Track?) {
         val name: String,
         val artist: Artist,
         val album: Album,
-        val url: String
+        val url: String,
+        val wiki: Wiki?
     )
 
     data class Artist(
@@ -19,5 +20,11 @@ data class TrackInfoSerializer(val track: Track?) {
         val artist: String,
         val title: String,
         val image: List<ImageSerializer>
+    )
+
+    data class Wiki(
+        val published: String,
+        val summary: String,
+        val content: String
     )
 }
