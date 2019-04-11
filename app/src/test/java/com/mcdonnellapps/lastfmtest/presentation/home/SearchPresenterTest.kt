@@ -223,13 +223,13 @@ class SearchPresenterTest {
     }
 
     @Test
-    fun `on subscribe, show empty placeholder`() {
+    fun `on bind, show empty placeholder`() {
         presenter.bind(view)
         verify { view.showEmptyPlaceholder() }
     }
 
     @Test
-    fun `on subscribe, retrieve recent queries`() {
+    fun `on bind, retrieve recent queries`() {
         val recentQueries = listOf("query")
 
         every {
@@ -293,5 +293,22 @@ class SearchPresenterTest {
         presenter.albumClicked(album)
 
         verify { view.showAlbumDetail(album) }
+    }
+
+    @Test
+    fun `on re-bind, if result exists, show result`() {
+        val track = mockk<Track>()
+        val result = MusicSearch(listOf(track))
+
+        coEvery { lastFmRepository.searchMusic("1234") } returns result
+
+        presenter.bind(view)
+        presenter.query("1234")
+        presenter.unbind()
+
+        verify(exactly = 1) { view.showSearchResult(result) }
+
+        presenter.bind(view)
+        verify(exactly = 2) { view.showSearchResult(result) }
     }
 }

@@ -20,11 +20,11 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import kotlinx.android.synthetic.main.search.*
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment(R.layout.search), SearchPresenter.View {
 
-    private val presenter by inject<SearchPresenter>()
+    private val presenter by viewModel<SearchPresenter>()
 
     private lateinit var groupAdapter: GroupAdapter<ViewHolder>
     private lateinit var musicSection: Section

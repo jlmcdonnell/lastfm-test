@@ -24,11 +24,14 @@ class SearchPresenter(
 ) : BasePresenter<SearchPresenter.View>(executors) {
 
     private var queryJob: Job? = null
+    private var result: MusicSearch? = null
 
     override fun bind(view: View) {
         super.bind(view)
-        view.showEmptyPlaceholder()
-        loadRecentQueries()
+        result?.let(this::handleResult) ?: run {
+            view.showEmptyPlaceholder()
+            loadRecentQueries()
+        }
     }
 
     fun query(query: String) {
@@ -50,18 +53,13 @@ class SearchPresenter(
             view?.showLoading()
 
             try {
-                val result = withContext(executors.io) {
+                result = withContext(executors.io) {
                     repository.searchMusic(query)
-                }
-
-                view?.hideLoading()
-
-                if (result.isEmpty()) {
-                    view?.showNoResultsPlaceholder()
-                } else {
-                    view?.hidePlaceholder()
-                    view?.showSearchResult(result)
-                    addRecentQuery(query)
+                }.also {
+                    handleResult(it)
+                    if (!it.isEmpty()) {
+                        addRecentQuery(query)
+                    }
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Error searching for music")
@@ -82,6 +80,17 @@ class SearchPresenter(
 
     fun artistClicked(artist: Artist) {
         view?.showArtistDetail(artist)
+    }
+
+    private fun handleResult(result: MusicSearch) {
+        view?.hideLoading()
+
+        if (result.isEmpty()) {
+            view?.showNoResultsPlaceholder()
+        } else {
+            view?.hidePlaceholder()
+            view?.showSearchResult(result)
+        }
     }
 
     private fun addRecentQuery(query: String) {
