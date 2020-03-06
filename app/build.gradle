@@ -10,7 +10,7 @@ buildscript {
 ext {
     readLastFMApiKey = {
         def apiKey = project.properties.getOrDefault("lastFMApiKey", null)
-        if (apiKey == null) throw new GradleException("last.fm API key not provided")
+        if (apiKey == null) throw new GradleException("\"lastFMApiKey\" API key not provided")
         apiKey
     }
 }
